@@ -1,6 +1,6 @@
 import fs from "fs";
 import matter from "gray-matter";
-
+import ReactMarkdown from "react-mark";
 type Data = {
   title: string;
   date: string;
@@ -10,7 +10,6 @@ type Data = {
 export async function getStaticProps({ params }) {
   const file = fs.readFileSync(`posts/${params.slug}.md`, "utf-8");
   const { data, content } = matter(file);
-  console.log(data);
   return { props: { frontMatter: data, content } };
 }
 
@@ -35,9 +34,9 @@ const Post = ({
   content: string;
 }) => {
   return (
-    <div>
+    <div className="prose">
       <h1>{frontMatter.title}</h1>
-      <div>{content}</div>
+      <ReactMarkdown>{content}</ReactMarkdown>
     </div>
   );
 };

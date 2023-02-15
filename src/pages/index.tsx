@@ -10,7 +10,7 @@ type Post = {
 export default function Home({ posts }) {
   return (
     <div className="my-8">
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 gap-4">
         {posts.map((post: Post) => (
           <PostCard key={post.slug} post={post} />
         ))}

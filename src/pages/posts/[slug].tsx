@@ -1,6 +1,8 @@
 import fs from "fs";
 import matter from "gray-matter";
 import ReactMarkdown from "react-mark";
+import Image from "next/image";
+
 type Data = {
   title: string;
   date: string;
@@ -34,8 +36,17 @@ const Post = ({
   content: string;
 }) => {
   return (
-    <div className="prose">
-      <h1>{frontMatter.title}</h1>
+    <div className="prose prose-lg max-w-none">
+      <div className="border">
+        <Image
+          src={`/${frontMatter.image}`}
+          width={1200}
+          height={700}
+          alt={frontMatter.title}
+        />
+      </div>
+      <h1 className="mt-12">{frontMatter.title}</h1>
+      <span>{frontMatter.date}</span>
       <ReactMarkdown>{content}</ReactMarkdown>
     </div>
   );

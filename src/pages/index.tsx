@@ -10,18 +10,20 @@ type Post = {
 export default function Home({ posts }) {
   return (
     <div className="my-8">
-      {posts.map((post: Post) => (
-        <PostCard key={post.slug} post={post} />
-      ))}
+      <div className="grid grid-cols-3">
+        {posts.map((post: Post) => (
+          <PostCard key={post.slug} post={post} />
+        ))}
+      </div>
     </div>
   );
 }
 
 export const getStaticProps = () => {
-  const files = fs.readdirSync("src/pages/posts");
+  const files = fs.readdirSync("posts");
   const posts: Post[] = files.map((fileName) => {
     const slug = fileName.replace(/\.md$/, "");
-    const fileContent = fs.readFileSync(`src/pages/posts/${fileName}`, "utf-8");
+    const fileContent = fs.readFileSync(`posts/${fileName}`, "utf-8");
     const { data } = matter(fileContent);
     return {
       frontMatter: data,

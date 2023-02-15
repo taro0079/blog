@@ -5,6 +5,35 @@ desciption: "dog dog"
 image: dog.png
 ---
 
-# DOG
+## Table of Contents
+
+## DOG
 
 I have a dog
+
+## test
+
+test
+
+## test test
+
+test test test
+
+```js[class="line-numbers"]
+import Layout from "../components/layout";
+import "../styles/globals.css";
+import "../styles/prism.css";
+import SEO from "../next-seo.config";
+import { DefaultSeo } from "next-seo";
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <Layout>
+      <DefaultSeo {...SEO} />
+      <Component {...pageProps} />
+    </Layout>
+  );
+}
+
+export default MyApp;
+```

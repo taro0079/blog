@@ -30,9 +30,13 @@ export const getStaticProps = () => {
       slug,
     };
   });
+
+  const sortedPosts = posts.sort((postA, postB) =>
+    new Date(postA.frontMatter.date) > new Date(postB.frontMatter.date) ? -1 : 1
+  );
   return {
     props: {
-      posts,
+      posts: sortedPosts,
     },
   };
 };

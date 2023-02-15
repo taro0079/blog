@@ -1,32 +1,25 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
 import fs from "fs";
-import styles from "src/styles/Home.module.css";
 import matter from "gray-matter";
-import Link from "next/link";
+import PostCard from "./components/PostCard";
 
-const inter = Inter({ subsets: ["latin"] });
+type Post = {
+  frontMatter: any;
+  slug: string;
+};
 
-const Home = ({ posts }) => {
+export default function Home({ posts }) {
   return (
     <div className="my-8">
-      <Link href="about">about</Link>
-      {posts.map((post) => (
-        <div key={post.slug}>
-          <Link href={`posts/${post.slug}`}>
-            <div>{post.frontMatter.title}</div>
-          </Link>
-        </div>
+      {posts.map((post: Post) => (
+        <PostCard key={post.slug} post={post} />
       ))}
     </div>
   );
-};
-export default Home;
+}
 
 export const getStaticProps = () => {
   const files = fs.readdirSync("src/pages/posts");
-  const posts = files.map((fileName) => {
+  const posts: Post[] = files.map((fileName) => {
     const slug = fileName.replace(/\.md$/, "");
     const fileContent = fs.readFileSync(`src/pages/posts/${fileName}`, "utf-8");
     const { data } = matter(fileContent);

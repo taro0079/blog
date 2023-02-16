@@ -7,9 +7,13 @@ import { unified } from "unified";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import remarkPrism from "remark-prism";
+import { createElement, useEffect, useState, Fragment } from "react";
+import Link from "next/link";
 
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
+import rehypeParse from "rehype-parse/lib";
+import rehypeReact from "rehype-react/lib";
 
 type Data = {
   title: string;
@@ -33,6 +37,26 @@ export async function getStaticProps({ params }) {
   return { props: { frontMatter: data, content: result.toString() } };
 }
 
+const toReactNode = (content) => {
+  const [Content, setContent] = useState(Fragment);
+  useEffect(() => {
+    const processor = unified()
+      .use(rehypeParse, {
+        fragment: true,
+      })
+      .use(rehypeReact, {
+        createElement,
+        Fragment,
+        components: {
+          Link: MyLink,
+        },
+      })
+      .processSync(content);
+    setContent(processor.result);
+  }, [content]);
+  return Content;
+};
+
 export async function getStaticPaths() {
   const files = fs.readdirSync("posts");
   const paths = files.map((fileName) => ({
@@ -45,6 +69,14 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
+
+const MyLink = ({ children, href }) => {
+  return (
+    <Link href={href}>
+      <div>{children}</div>
+    </Link>
+  );
+};
 
 const Post = ({
   frontMatter,
@@ -65,10 +97,7 @@ const Post = ({
       </div>
       <h1 className="mt-12">{frontMatter.title}</h1>
       <span>{frontMatter.date}</span>
-      <div
-        className="mt-12"
-        dangerouslySetInnerHTML={{ __html: content }}
-      ></div>
+      {toReactNode(content)}
     </div>
   );
 };

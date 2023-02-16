@@ -9,7 +9,6 @@ import rehypeStringify from "rehype-stringify";
 import remarkPrism from "remark-prism";
 import { createElement, useEffect, useState, Fragment } from "react";
 import Link from "next/link";
-
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 import rehypeParse from "rehype-parse/lib";
@@ -48,7 +47,8 @@ const toReactNode = (content) => {
         createElement,
         Fragment,
         components: {
-          Link: MyLink,
+          a: MyLink,
+          img: MyImage,
         },
       })
       .processSync(content);
@@ -69,6 +69,10 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
+
+const MyImage = ({ src, alt }) => {
+  return <Image src={src} alt={alt} width="1200" height="700" />;
+};
 
 const MyLink = ({ children, href }) => {
   return (
@@ -98,6 +102,9 @@ const Post = ({
       <h1 className="mt-12">{frontMatter.title}</h1>
       <span>{frontMatter.date}</span>
       {toReactNode(content)}
+      <div className="mt-10 flex items-center justify-center">
+        <Link href="/">HOME</Link>
+      </div>
     </div>
   );
 };
